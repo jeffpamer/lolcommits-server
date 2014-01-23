@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>lolcommits</title>
+    <script>
+        var request = new XMLHttpRequest();
+
+        var setImage = function () {
+            if (request.readyState !== 4 || request.status !== 200) {
+                return;
+            }
+
+            var response = JSON.parse(request.responseText);
+            var img = document.createElement('img');
+
+            img.setAttribute('src', response.image);
+            img.height = 480;
+            img.width = 640;
+
+            document.body.innerHTML = '';
+            document.body.appendChild(img);
+        };
+
+        var getRecent = function () {
+            request.open("GET", "/recent.json", true);
+            request.onreadystatechange = setImage;
+            request.send();
+        };
+
+        setInterval(getRecent, 5000);
+        getRecent();
+    </script>
+</head>
+<body style="background: #000;">
+</body>
+</html>
