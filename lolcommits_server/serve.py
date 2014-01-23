@@ -5,13 +5,14 @@ from flask import render_template, send_from_directory, url_for
 from werkzeug import secure_filename
 
 
-UPLOAD_FOLDER = 'uploads/'
+MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(MODULE_DIR, "uploads/")
+
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.debug = True
+app.config['UPLOAD_FOLDER'] = UPLOAD_DIR
 
 
 def allowed_file(filename):
@@ -58,4 +59,4 @@ def uploaded_file(filename):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
