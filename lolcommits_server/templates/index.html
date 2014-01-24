@@ -4,24 +4,39 @@
     <title>lolcommits</title>
     <script>
         var request = new XMLHttpRequest();
+        var lastImage;
+        var lastFilename;
 
-        var setImage = function () {
+        var appendImage = function () {
+            var response;
+            var image;
+
             if (request.readyState !== 4 || request.status !== 200) {
                 return;
             }
 
-            var response = JSON.parse(request.responseText);
-            var img = document.createElement('img');
+            response = JSON.parse(request.responseText);
 
-            img.setAttribute('src', response.image);
+            if (response.image !== lastFilename) {
+                image = document.createElement('img');
+                image.width = 640;
+                image.height = 480;
+                image.setAttribute('src', response.image);
 
-            document.body.innerHTML = '';
-            document.body.appendChild(img);
+                if (lastImage) {
+                    document.body.insertBefore(image, lastImage);
+                } else {
+                    document.body.appendChild(image);
+                }
+
+                lastImage = image;
+                lastFilename = response.image
+            };
         };
 
         var getRecent = function () {
             request.open("GET", "/recent.json", true);
-            request.onreadystatechange = setImage;
+            request.onreadystatechange = appendImage;
             request.send();
         };
 
@@ -31,10 +46,12 @@
     <style>
         body {
             background: #000;
+            margin: 0;
+            padding: 0;
         }
         img {
-            width: 100%;
-            height: auto;
+            float: left;
+            padding: 10px 0 0 10px;
         }
     </style>
 </head>
