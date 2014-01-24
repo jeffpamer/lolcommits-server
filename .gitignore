@@ -4,4 +4,7 @@
 *.sw[p|o]
 .DS_Store
 __MACOSX
+dist
+build
+*.egg-info
 lolcommits_server/uploads/
