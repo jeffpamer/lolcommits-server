@@ -7,7 +7,7 @@
         var lastImage;
         var lastFilename;
 
-        var appendImage = function () {
+        var addImage = function () {
             var response;
             var image;
 
@@ -36,7 +36,7 @@
 
         var getRecent = function () {
             request.open("GET", "/recent.json", true);
-            request.onreadystatechange = appendImage;
+            request.onreadystatechange = addImage;
             request.send();
         };
 
