@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, Response, jsonify, request, redirect
-from flask import render_template, send_from_directory, url_for
+from flask import render_template, send_from_directory, url_for, send_file
 from werkzeug import secure_filename
 
 
@@ -21,14 +21,7 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     )
 
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-
-@app.route('/recent.json')
-def recent():
+def recentImage():
     images = sorted(
         os.listdir(app.config['UPLOAD_FOLDER']),
         key=lambda p: os.path.getctime(
@@ -39,8 +32,21 @@ def recent():
         image = images[-1]
     else:
         image = 'default.jpg'
+    return image
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/recent.json')
+def recentJson():
+    image = recentImage()
     return jsonify({'image': '/uploads/' + image})
 
+@app.route('/recent.jpg')
+def recentJpg():
+    image = recentImage()
+    return send_file('uploads/' + image, mimetype='image/jpg', cache_timeout=5)
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
