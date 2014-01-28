@@ -32,7 +32,7 @@ def recent_image():
     if len(images):
         image = images[-1]
     else:
-        image = 'default.gif'
+        image = 'default.jpg'
     return image
 
 
