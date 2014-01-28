@@ -31,7 +31,7 @@ def recentImage():
     if len(images):
         image = images[-1]
     else:
-        image = 'default.jpg'
+        image = 'default.gif'
     return image
 
 @app.route('/')
@@ -43,10 +43,12 @@ def recentJson():
     image = recentImage()
     return jsonify({'image': '/uploads/' + image})
 
-@app.route('/recent.jpg')
-def recentJpg():
+# Routed as a .gif, but it will actually dynamically serve any image type
+@app.route('/recent.gif')
+def recentGif():
     image = recentImage()
-    return send_file('uploads/' + image, mimetype='image/jpg', cache_timeout=5)
+    extension = image.split('.')[-1]
+    return send_file('uploads/' + image, mimetype='image/' + extension, cache_timeout=5)
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
