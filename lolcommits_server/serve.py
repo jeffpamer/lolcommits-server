@@ -48,7 +48,7 @@ def recent_json():
 
 
 @app.route('/recent.gif')
-def recent_image():
+def recent_file():
     # Routed as a .gif, but it will actually dynamically serve any image type.
     image = recent_image()
     extension = image.split('.')[-1]
