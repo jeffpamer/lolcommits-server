@@ -21,7 +21,8 @@ def allowed_file(filename):
         filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
     )
 
-def recentImage():
+
+def recent_image():
     images = sorted(
         os.listdir(app.config['UPLOAD_FOLDER']),
         key=lambda p: os.path.getctime(
@@ -34,21 +35,26 @@ def recentImage():
         image = 'default.gif'
     return image
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
+
 @app.route('/recent.json')
-def recentJson():
-    image = recentImage()
+def recent_json():
+    image = recent_image()
     return jsonify({'image': '/uploads/' + image})
 
-# Routed as a .gif, but it will actually dynamically serve any image type
+
 @app.route('/recent.gif')
-def recentGif():
-    image = recentImage()
+def recent_image():
+    # Routed as a .gif, but it will actually dynamically serve any image type.
+    image = recent_image()
     extension = image.split('.')[-1]
-    return send_file('uploads/' + image, mimetype='image/' + extension, cache_timeout=5)
+    return send_file('uploads/' + image, mimetype='image/' + extension,
+                     cache_timeout=5)
+
 
 @app.route('/upload/', methods=['GET', 'POST'])
 def upload_file():
