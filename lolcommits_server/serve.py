@@ -51,9 +51,7 @@ def recent_json():
 def recent_file():
     # Routed as a .gif, but it will actually dynamically serve any image type.
     image = recent_image()
-    extension = image.split('.')[-1]
-    return send_file('uploads/' + image, mimetype='image/' + extension,
-                     cache_timeout=5)
+    return send_file('uploads/' + image, cache_timeout=5)
 
 
 @app.route('/upload/', methods=['GET', 'POST'])
