@@ -1,4 +1,4 @@
-import os
+import os, random
 
 from flask import Flask, Response, jsonify, request, redirect
 from flask import render_template, send_from_directory, url_for, send_file
@@ -36,6 +36,16 @@ def recent_image():
     return image
 
 
+def random_image():
+    images = random.choice(os.listdir(app.config['UPLOAD_FOLDER'])),
+
+    if len(images):
+        image = images[-1]
+    else:
+        image = 'default.jpg'
+    return image
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -51,6 +61,19 @@ def recent_json():
 def recent_file():
     # Routed as a .gif, but it will actually dynamically serve any image type.
     image = recent_image()
+    return send_file('uploads/' + image, cache_timeout=5)
+
+
+@app.route('/random.json')
+def random_json():
+    image = random_image()
+    return jsonify({'image': '/uploads/' + image})
+
+
+@app.route('/random.gif')
+def random_file():
+    # Routed as a .gif, but it will actually dynamically serve any image type.
+    image = random_image()
     return send_file('uploads/' + image, cache_timeout=5)
 
 
